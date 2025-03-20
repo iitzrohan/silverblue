@@ -1,5 +1,23 @@
 name: Reusable Build and Push
 on:
+  workflow_dispatch:
+    inputs:
+      image_flavors:
+        description: "JSON string of flavors to build, '[main, nvidia-open]'"
+        default: "['main', 'nvidia-open']"
+        type: string
+      brand_name:
+        description: "The Brand Name: silverblue"
+        required: true
+        default: silverblue
+        type: string
+      stream_name:
+        description: "The Fedora Version: gts, stable, or latest"
+        required: true
+        type: string
+      kernel_pin:
+        description: "The full kernel version to pin"
+        type: string
   workflow_call:
     inputs:
       image_flavors:

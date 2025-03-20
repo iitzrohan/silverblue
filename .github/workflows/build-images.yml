@@ -18,6 +18,10 @@ permissions:
   id-token: write
 
 jobs:
-  build-image-latest-main:
-    uses: ./.github/workflows/build-image-latest-main.yml
+  build-image-latest:
+    uses: ./.github/workflows/build-image-latest.yml
+    secrets: inherit
+  
+  build-image-stable:
+    uses: ./.github/workflows/build-image-stable.yml
     secrets: inherit

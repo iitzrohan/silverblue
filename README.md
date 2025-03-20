@@ -48,7 +48,7 @@ Replace TAG with the specified image.
 All images in this repo are signed with sigstore's cosign. You can verify the signatures by running the following command
 
 ```console
-$ cosign verify --key "https://raw.githubusercontent.com/m2Giles/iitzrohan/refs/heads/main/cosign.pub" "ghcr.io/iitzrohan/silverblue:TAG
+$ cosign verify --key "https://raw.githubusercontent.com/iitzrohan/silverblue/refs/heads/main/cosign.pub" "ghcr.io/iitzrohan/silverblue:TAG
 ```
 
 Again replace the TAG with the specified image

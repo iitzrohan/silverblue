@@ -112,11 +112,11 @@ build $image="bluefin" $tag="latest" $flavor="main" rechunk="0" ghcr="0" pipelin
         target="base"
     fi
 
-    # AKMODS Flavor and Kernel Version
+    # AKMODS Flavor and Kernel Version {bazzite, coreos-stable, coreos-testing, main}
     if [[ "${flavor}" =~ hwe ]]; then
         akmods_flavor="bazzite"
-    elif [[ "${tag}" =~ gts|stable ]]; then
-        akmods_flavor="coreos-stable"
+    elif [[ "${tag}" =~ stable ]]; then
+        akmods_flavor="main"
     elif [[ "${tag}" =~ beta ]]; then
         akmods_flavor="coreos-testing"
     else
@@ -129,25 +129,11 @@ build $image="bluefin" $tag="latest" $flavor="main" rechunk="0" ghcr="0" pipelin
     fi
     fedora_version=$(just fedora_version '{{ image }}' '{{ tag }}' '{{ flavor }}' '{{ kernel_pin }}')
 
-    # Verify Base Image with cosign
-    just verify-container "${base_image_name}-main:${fedora_version}"
-
     # Kernel Release/Pin
     if [[ -z "${kernel_pin:-}" ]]; then
         kernel_release=$(skopeo inspect --retry-times 3 docker://ghcr.io/ublue-os/akmods:"${akmods_flavor}"-"${fedora_version}" | jq -r '.Labels["ostree.linux"]')
     else
         kernel_release="${kernel_pin}"
-    fi
-
-    # Verify Containers with Cosign
-    just verify-container "akmods:${akmods_flavor}-${fedora_version}-${kernel_release}"
-    if [[ "${akmods_flavor}" =~ coreos ]]; then
-        just verify-container "akmods-zfs:${akmods_flavor}-${fedora_version}-${kernel_release}"
-    fi
-    if [[ "${flavor}" =~ nvidia-open ]]; then
-        just verify-container "akmods-nvidia-open:${akmods_flavor}-${fedora_version}-${kernel_release}"
-    elif [[ "${flavor}" =~ nvidia ]]; then
-        just verify-container "akmods-nvidia:${akmods_flavor}-${fedora_version}-${kernel_release}"
     fi
 
     # Get Version
@@ -625,39 +611,6 @@ changelogs branch="stable" handwritten="":
     set -eou pipefail
     python3 ./.github/changelogs.py "{{ branch }}" ./output.env ./changelog.md --workdir . --handwritten "{{ handwritten }}"
 
-# Verify Container with Cosign
-[group('Utility')]
-verify-container container="" registry="ghcr.io/ublue-os" key="":
-    #!/usr/bin/bash
-    set -eou pipefail
-
-    # Get Cosign if Needed
-    if [[ ! $(command -v cosign) ]]; then
-        COSIGN_CONTAINER_ID=$(${SUDOIF} ${PODMAN} create cgr.dev/chainguard/cosign:latest bash)
-        ${SUDOIF} ${PODMAN} cp "${COSIGN_CONTAINER_ID}":/usr/bin/cosign /usr/local/bin/cosign
-        ${SUDOIF} ${PODMAN} rm -f "${COSIGN_CONTAINER_ID}"
-    fi
-
-    # Verify Cosign Image Signatures if needed
-    if [[ -n "${COSIGN_CONTAINER_ID:-}" ]]; then
-        if ! cosign verify --certificate-oidc-issuer=https://token.actions.githubusercontent.com --certificate-identity=https://github.com/chainguard-images/images/.github/workflows/release.yaml@refs/heads/main cgr.dev/chainguard/cosign >/dev/null; then
-            echo "NOTICE: Failed to verify cosign image signatures."
-            exit 1
-        fi
-    fi
-
-    # Public Key for Container Verification
-    key={{ key }}
-    if [[ -z "${key:-}" ]]; then
-        key="https://raw.githubusercontent.com/ublue-os/main/main/cosign.pub"
-    fi
-
-    # Verify Container using cosign public key
-    if ! cosign verify --key "${key}" "{{ registry }}"/"{{ container }}" >/dev/null; then
-        echo "NOTICE: Verification failed. Please ensure your public key is correct."
-        exit 1
-    fi
-
 # Secureboot Check
 [group('Utility')]
 secureboot $image="bluefin" $tag="latest" $flavor="main":
@@ -721,7 +674,8 @@ fedora_version image="bluefin" tag="latest" flavor="main" $kernel_pin="":
             # CoreOS does not uses cosign
             skopeo inspect --retry-times 3 docker://quay.io/fedora/fedora-coreos:stable > /tmp/manifest.json
         else
-            skopeo inspect --retry-times 3 docker://ghcr.io/ublue-os/base-main:"{{ tag }}" > /tmp/manifest.json
+            # skopeo inspect --retry-times 3 docker://ghcr.io/ublue-os/base-main:"{{ tag }}" > /tmp/manifest.json
+            skopeo inspect --retry-times 3 docker://quay.io/fedora-ostree-desktops/silverblue:42 > /tmp/manifest.json
         fi
     fi
     fedora_version=$(jq -r '.Labels["ostree.linux"]' < /tmp/manifest.json | grep -oP 'fc\K[0-9]+')

@@ -20,20 +20,34 @@ rpm-ostree install \
 curl -Lo /etc/yum.repos.d/negativo17-fedora-multimedia.repo https://negativo17.org/repos/fedora-multimedia.repo
 sed -i '0,/enabled=1/{s/enabled=1/enabled=1\npriority=90/}' /etc/yum.repos.d/negativo17-fedora-multimedia.repo
 
-rpm-ostree override replace \
-      --experimental \
-      --from repo='fedora-multimedia' \
-        libheif \
-        libva \
-        libva-intel-media-driver \
-        mesa-dri-drivers \
-        mesa-filesystem \
-        mesa-libEGL \
-        mesa-libGL \
-        mesa-libgbm \
-        mesa-libxatracker \
-        mesa-va-drivers \
-        mesa-vulkan-drivers
+if [ "$FEDORA_MAJOR_VERSION" -eq "41" ]; then
+  rpm-ostree override replace \
+        --experimental \
+        --from repo='fedora-multimedia' \
+          libheif \
+          libva \
+          libva-intel-media-driver \
+          mesa-dri-drivers \
+          mesa-filesystem \
+          mesa-libEGL \
+          mesa-libGL \
+          mesa-libgbm \
+          mesa-libxatracker \
+          mesa-va-drivers \
+          mesa-vulkan-drivers
+# elif [ "$FEDORA_MAJOR_VERSION" -eq "42" ]; then
+#   rpm-ostree override replace \
+#         --experimental \
+#         --from repo='fedora-multimedia' \
+#           libva \
+#           libva-intel-media-driver \
+#           mesa-libEGL \
+#           mesa-libGL \
+#           mesa-libgbm \
+#           mesa-libxatracker \
+#           mesa-va-drivers \
+#           mesa-vulkan-drivers
+fi
 
 rpm-ostree override remove \
         gnome-software-rpm-ostree
