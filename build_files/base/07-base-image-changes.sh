@@ -22,14 +22,6 @@ tee /usr/share/glib-2.0/schemas/zz1-bluefin-modifications-mutter-exp-feats.gsche
 experimental-features=[${MUTTER_EXP_FEATS}]
 EOF
 
-# GNOME Terminal is replaced with Ptyxis in F41+
-# Make schema valid on GNOME <47 which do not contain the accent-color key or xwayland-native-scaling mutter feature
-if [[ "${FEDORA_MAJOR_VERSION}" -lt "41" ]]; then
-    sed -i 's@\[Desktop Entry\]@\[Desktop Entry\]\nNoDisplay=true@g' /usr/share/applications/org.gnome.Terminal.desktop
-    sed -i 's@accent-color="slate"@@g' /usr/share/glib-2.0/schemas/zz0-bluefin-modifications.gschema.override
-    sed -i 's@'", "\''xwayland-native-scaling'\''@@g' /usr/share/glib-2.0/schemas/zz1-bluefin-modifications-mutter-exp-feats.gschema.override
-fi
-
 # Create symlinks from old to new wallpaper names for backwards compatibility
 ln -s "/usr/share/backgrounds/bluefin/01-bluefin.xml" "/usr/share/backgrounds/bluefin/bluefin-winter-dynamic.xml"
 ln -s "/usr/share/backgrounds/bluefin/04-bluefin.xml" "/usr/share/backgrounds/bluefin/bluefin-spring-dynamic.xml"
