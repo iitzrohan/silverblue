@@ -176,17 +176,17 @@ build $image="bluefin" $tag="latest" $flavor="main" rechunk="0" ghcr="0" pipelin
     LABELS+=("--label" "org.opencontainers.image.title=${image_name}")
     LABELS+=("--label" "org.opencontainers.image.version=${ver}")
     LABELS+=("--label" "ostree.linux=${kernel_release}")
-    LABELS+=("--label" "io.artifacthub.package.readme-url=https://raw.githubusercontent.com/ublue-os/bluefin/refs/heads/main/README.md")
+    LABELS+=("--label" "io.artifacthub.package.readme-url=https://raw.githubusercontent.com/iitzrohan/silverblue/refs/heads/main/README.md")
     LABELS+=("--label" "io.artifacthub.package.logo-url=https://avatars.githubusercontent.com/u/120078124?s=200&v=4")
     LABELS+=("--label" "org.opencontainers.image.description=An interpretation of the Ubuntu spirit built on Fedora technology")
     LABELS+=("--label" "containers.bootc=1")
     LABELS+=("--label" "org.opencontainers.image.created=$(date -u +%Y\-%m\-%d\T%H\:%M\:%S\Z)")
-    LABELS+=("--label" "org.opencontainers.image.source=https://raw.githubusercontent.com/ublue-os/bluefin/refs/heads/main/Containerfile")
+    LABELS+=("--label" "org.opencontainers.image.source=https://raw.githubusercontent.com/iitzrohan/silverblue/refs/heads/main/Containerfile")
     LABELS+=("--label" "org.opencontainers.image.url=https://projectbluefin.io")
     LABELS+=("--label" "org.opencontainers.image.vendor={{ repo_organization }}")
     LABELS+=("--label" "io.artifacthub.package.deprecated=false")
-    LABELS+=("--label" "io.artifacthub.package.keywords=bootc,fedora,bluefin,ublue,universal-blue")
-    LABELS+=("--label" "io.artifacthub.package.maintainers=[{\"name\": \"castrojo\", \"email\": \"jorge.castro@gmail.com\"}]")
+    LABELS+=("--label" "io.artifacthub.package.keywords=bootc,fedora,silverblue")
+    LABELS+=("--label" "io.artifacthub.package.maintainers=[{\"name\": \"iitzrohan\", \"email\": \"t.rohan1903@gmail.com\"}]")
 
     echo "::endgroup::"
     echo "::group:: Build Container"
@@ -281,13 +281,13 @@ rechunk $image="bluefin" $tag="latest" $flavor="main" ghcr="0" pipeline="0":
     # Rest of Labels
     LABELS="
         io.artifacthub.package.deprecated=false
-        io.artifacthub.package.keywords=bootc,fedora,bluefin,ublue,universal-blue
+        io.artifacthub.package.keywords=bootc,fedora,silverblue
         io.artifacthub.package.logo-url=https://avatars.githubusercontent.com/u/120078124?s=200&v=4
         io.artifacthub.package.maintainers=[{\"name\": \"castrojo\", \"email\": \"jorge.castro@gmail.com\"}]
-        io.artifacthub.package.readme-url=https://raw.githubusercontent.com/ublue-os/bluefin/refs/heads/main/README.md
+        io.artifacthub.package.readme-url=https://raw.githubusercontent.com/iitzrohan/silverblue/refs/heads/main/README.md
         org.opencontainers.image.created=$(date -u +%Y\-%m\-%d\T%H\:%M\:%S\Z)
         org.opencontainers.image.license=Apache-2.0
-        org.opencontainers.image.source=https://raw.githubusercontent.com/ublue-os/bluefin/refs/heads/main/Containerfile
+        org.opencontainers.image.source=https://raw.githubusercontent.com/iitzrohan/silverblue/refs/heads/main/Containerfile
         org.opencontainers.image.title=${image_name}
         org.opencontainers.image.url=https://projectbluefin.io
         org.opencontainers.image.vendor={{ repo_organization }}
@@ -674,7 +674,6 @@ fedora_version image="bluefin" tag="latest" flavor="main" $kernel_pin="":
             # CoreOS does not uses cosign
             skopeo inspect --retry-times 3 docker://quay.io/fedora/fedora-coreos:stable > /tmp/manifest.json
         else
-            # skopeo inspect --retry-times 3 docker://ghcr.io/ublue-os/base-main:"{{ tag }}" > /tmp/manifest.json
             skopeo inspect --retry-times 3 docker://quay.io/fedora-ostree-desktops/silverblue:42 > /tmp/manifest.json
         fi
     fi

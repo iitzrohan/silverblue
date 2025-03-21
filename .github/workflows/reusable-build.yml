@@ -185,6 +185,10 @@ jobs:
 
             echo "digest=${digest}" >> $GITHUB_OUTPUT
 
+      - name: Install Cosign
+        uses: sigstore/cosign-installer@d7d6bc7722e3daa8354c50bcb52f4837da5e9b6a # v3.8.1
+        if: github.event_name != 'pull_request'
+
       - name: Sign container image
         if: github.event_name != 'pull_request'
         run: |

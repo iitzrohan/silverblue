@@ -10,18 +10,13 @@
 				"apr-util",
 				"bash-color-prompt",
 				"bcache-tools",
-				"bluefin-backgrounds",
-				"bluefin-schemas",
 				"bootc",
 				"borgbackup",
 				"clinfo",
 				"ddcutil",
 				"distrobox",
-				"epson-inkjet-printer-escpr",
-				"epson-inkjet-printer-escpr2",
 				"evtest",
 				"ffmpeg",
-				"ffmpeg-libs",
 				"ffmpegthumbnailer",
 				"flatpak-spawn",
 				"foo2zjs",
@@ -75,7 +70,6 @@
 				"pam-u2f",
 				"pam_yubico",
 				"pamu2fcfg",
-				"pipewire-libs-extra",
 				"pipewire-plugin-libcamera",
 				"powerstat",
 				"powertop",
@@ -266,7 +260,11 @@
 	"41": {
 		"include": {
 			"all": [
-				"google-noto-fonts-all"
+				"epson-inkjet-printer-escpr",
+				"epson-inkjet-printer-escpr2",
+				"ffmpeg-libs",
+				"google-noto-fonts-all",
+				"pipewire-libs-extra"
 			],
 			"silverblue": []
 		},

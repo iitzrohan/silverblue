@@ -55,6 +55,6 @@ Again replace the TAG with the specified image
 
 ## DIY
 
-This repo was build on the [Universal Blue Image Template](https://github.com/ublue-os/image-template) and added to significantly.
+This repo was build on the [Universal Blue Image Template](https://github.com/ublue-os/image-template).
 
 It is possible to build all images and ISOs locally using the provided `Justfile` with `just`.

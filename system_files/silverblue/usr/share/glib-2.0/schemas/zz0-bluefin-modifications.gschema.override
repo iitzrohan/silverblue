@@ -5,8 +5,6 @@ favorite-apps = ['org.gnome.Nautilus.desktop', 'org.gnome.Software.desktop', 'co
 enabled-extensions = ['appindicatorsupport@rgcjonas.gmail.com', 'gsconnect@andyholmes.github.io', 'tailscale@joaophi.github.com']
 
 [org.gnome.desktop.background]
-picture-uri='file:///usr/share/backgrounds/bluefin/01-bluefin.xml'
-picture-uri-dark='file:///usr/share/backgrounds/bluefin/01-bluefin.xml'
 picture-options='zoom'
 primary-color='000000'
 secondary-color='FFFFFF'

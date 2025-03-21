@@ -57,9 +57,7 @@ if [[ "${IMAGE_NAME}" =~ nvidia ]]; then
     mv /tmp/rpms/* /tmp/akmods-rpms/
 
     # Install Nvidia RPMs
-    curl -Lo /tmp/nvidia-install.sh https://raw.githubusercontent.com/ublue-os/hwe/main/nvidia-install.sh # Change when nvidia-install.sh updates
-    chmod +x /tmp/nvidia-install.sh
-    IMAGE_NAME="${BASE_IMAGE_NAME}" RPMFUSION_MIRROR="" /tmp/nvidia-install.sh
+    /ctx/build_files/base/04-nvidia-install.sh
     rm -f /usr/share/vulkan/icd.d/nouveau_icd.*.json
     ln -sf libnvidia-ml.so.1 /usr/lib64/libnvidia-ml.so
 fi
