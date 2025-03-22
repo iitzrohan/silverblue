@@ -90,7 +90,7 @@ validate $image $tag $flavor:
 
 # Build Image
 [group('Image')]
-build $image="bluefin" $tag="latest" $flavor="main" rechunk="0" ghcr="0" pipeline="0" $kernel_pin="":
+build $image="bluefin" $tag="latest" $flavor="main" rechunk="0" ghcr="0" pipeline="0":
     #!/usr/bin/bash
 
     echo "::group:: Build Prep"
@@ -127,14 +127,9 @@ build $image="bluefin" $tag="latest" $flavor="main" rechunk="0" ghcr="0" pipelin
     if [[ {{ ghcr }} == "0" ]]; then
         rm -f /tmp/manifest.json
     fi
-    fedora_version=$(just fedora_version '{{ image }}' '{{ tag }}' '{{ flavor }}' '{{ kernel_pin }}')
+    fedora_version=$(just fedora_version '{{ image }}' '{{ tag }}' '{{ flavor }}')
 
-    # Kernel Release/Pin
-    if [[ -z "${kernel_pin:-}" ]]; then
-        kernel_release=$(skopeo inspect --retry-times 3 docker://ghcr.io/ublue-os/akmods:"${akmods_flavor}"-"${fedora_version}" | jq -r '.Labels["ostree.linux"]')
-    else
-        kernel_release="${kernel_pin}"
-    fi
+    kernel_release=$(skopeo inspect --retry-times 3 docker://ghcr.io/ublue-os/akmods:"${akmods_flavor}"-"${fedora_version}" | jq -r '.Labels["ostree.linux"]')
 
     # Get Version
     if [[ "${tag}" =~ stable ]]; then
@@ -212,24 +207,24 @@ build $image="bluefin" $tag="latest" $flavor="main" rechunk="0" ghcr="0" pipelin
 
 # Build Image and Rechunk
 [group('Image')]
-build-rechunk image="bluefin" tag="latest" flavor="main" kernel_pin="":
-    @just build {{ image }} {{ tag }} {{ flavor }} 1 0 0 {{ kernel_pin }}
+build-rechunk image="bluefin" tag="latest" flavor="main":
+    @just build {{ image }} {{ tag }} {{ flavor }} 1 0 0
 
 # Build Image with GHCR Flag
 [group('Image')]
-build-ghcr image="bluefin" tag="latest" flavor="main" kernel_pin="":
+build-ghcr image="bluefin" tag="latest" flavor="main":
     #!/usr/bin/bash
     if [[ "${UID}" -gt "0" ]]; then
         echo "Must Run with sudo or as root..."
         exit 1
     fi
-    just build {{ image }} {{ tag }} {{ flavor }} 0 1 0 {{ kernel_pin }}
+    just build {{ image }} {{ tag }} {{ flavor }} 0 1 0
 
 # Build Image for Pipeline:
 [group('Image')]
-build-pipeline image="bluefin" tag="latest" flavor="main" kernel_pin="":
+build-pipeline image="bluefin" tag="latest" flavor="main":
     #!/usr/bin/bash
-    ${SUDOIF} just build {{ image }} {{ tag }} {{ flavor }} 1 1 1 {{ kernel_pin }}
+    ${SUDOIF} just build {{ image }} {{ tag }} {{ flavor }} 1 1 1
 
 # Rechunk Image
 [group('Image')]
@@ -665,7 +660,7 @@ secureboot $image="bluefin" $tag="latest" $flavor="main":
 # Get Fedora Version of an image
 [group('Utility')]
 [private]
-fedora_version image="bluefin" tag="latest" flavor="main" $kernel_pin="":
+fedora_version image="bluefin" tag="latest" flavor="main":
     #!/usr/bin/bash
     set -eou pipefail
     just validate {{ image }} {{ tag }} {{ flavor }}
@@ -678,9 +673,6 @@ fedora_version image="bluefin" tag="latest" flavor="main" $kernel_pin="":
         fi
     fi
     fedora_version=$(jq -r '.Labels["ostree.linux"]' < /tmp/manifest.json | grep -oP 'fc\K[0-9]+')
-    if [[ -n "${kernel_pin:-}" ]]; then
-        fedora_version=$(echo "${kernel_pin}" | grep -oP 'fc\K[0-9]+')
-    fi
     echo "${fedora_version}"
 
 # Image Name
@@ -699,7 +691,7 @@ image_name image="bluefin" tag="latest" flavor="main":
 
 # Generate Tags
 [group('Utility')]
-generate-build-tags image="bluefin" tag="latest" flavor="main" kernel_pin="" ghcr="0" $version="" github_event="" github_number="":
+generate-build-tags image="bluefin" tag="latest" flavor="main" ghcr="0" $version="" github_event="" github_number="":
     #!/usr/bin/bash
     set -eou pipefail
 
@@ -708,7 +700,7 @@ generate-build-tags image="bluefin" tag="latest" flavor="main" kernel_pin="" ghc
     if [[ {{ ghcr }} == "0" ]]; then
         rm -f /tmp/manifest.json
     fi
-    FEDORA_VERSION="$(just fedora_version '{{ image }}' '{{ tag }}' '{{ flavor }}' '{{ kernel_pin }}')"
+    FEDORA_VERSION="$(just fedora_version '{{ image }}' '{{ tag }}' '{{ flavor }}')"
     DEFAULT_TAG=$(just generate-default-tag {{ tag }} {{ ghcr }})
     IMAGE_NAME=$(just image_name {{ image }} {{ tag }} {{ flavor }})
     # Use Build Version from Rechunk
