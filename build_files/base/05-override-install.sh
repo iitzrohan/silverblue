@@ -4,25 +4,54 @@ echo "::group:: ===$(basename "$0")==="
 
 set -eoux pipefail
 
-# Patched shells
-if [ "$FEDORA_MAJOR_VERSION" -eq "41" ]; then
-dnf5 -y swap \
---repo=copr:copr.fedorainfracloud.org:ublue-os:staging \
-    gnome-shell gnome-shell
+dnf5 -y swap --repo=fedora OpenCL-ICD-Loader ocl-icd
 
-# Fix for ID in fwupd
-dnf5 -y swap \
-    --repo=copr:copr.fedorainfracloud.org:ublue-os:staging \
-        fwupd fwupd
+dnf5 -y install \
+    ublue-os-luks \
+    ublue-os-signing \
+    ublue-os-udev-rules
 
-# Switcheroo patch
-dnf5 -y swap \
-    --repo=copr:copr.fedorainfracloud.org:sentry:switcheroo-control_discrete \
-        switcheroo-control switcheroo-control
-        
-fi
-
-dnf5 -y copr remove sentry/switcheroo-control_discrete
+OVERRIDES=(
+     libva
+ )
+ 
+ if [[ "$FEDORA_MAJOR_VERSION" -lt "42" ]]; then
+     OVERRIDES+=(
+         libheif
+         libva-intel-media-driver
+         mesa-dri-drivers
+         mesa-filesystem
+         mesa-libEGL
+         mesa-libGL
+         mesa-libgbm
+         mesa-libxatracker
+         mesa-va-drivers
+         mesa-vulkan-drivers
+     )
+ fi
+ 
+ if [[ "$FEDORA_MAJOR_VERSION" -lt "41" ]]; then
+     OVERRIDES+=(
+         libvdpau
+         mesa-libglapi
+     )
+ fi
+ 
+ for override in "${OVERRIDES[@]}"; do
+     dnf5 swap -y --repo='fedora-multimedia' \
+         "$override" "$override"
+     dnf5 versionlock add "$override"
+ done
+ 
+ # Disable DKMS support in gnome-software
+ if [[ "$FEDORA_MAJOR_VERSION" -ge "41" && "$IMAGE_NAME" == "silverblue" ]]; then
+     dnf5 remove -y \
+         gnome-software-rpm-ostree
+     dnf5 swap -y \
+         --repo=copr:copr.fedorainfracloud.org:ublue-os:staging \
+         gnome-software gnome-software
+     dnf5 versionlock add gnome-software
+ fi
 
 # Starship Shell Prompt
 curl --retry 3 -Lo /tmp/starship.tar.gz "https://github.com/starship/starship/releases/latest/download/starship-x86_64-unknown-linux-gnu.tar.gz"

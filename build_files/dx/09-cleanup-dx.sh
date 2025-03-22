@@ -11,13 +11,10 @@ systemctl enable libvirt-workaround.service
 systemctl enable bluefin-dx-groups.service
 
 dnf5 -y copr disable ublue-os/akmods
-dnf5 -y copr disable ublue-os/staging
 dnf5 -y copr disable ublue-os/packages
 if [[ "${FEDORA_MAJOR_VERSION}" -lt "42" ]]; then
     dnf5 -y copr disable ganto/lxc4
 fi
-dnf5 -y copr disable ganto/umoci
-dnf5 -y copr disable karmab/kcli
 dnf5 -y copr disable atim/ubuntu-fonts
 dnf5 -y copr disable hikariknight/looking-glass-kvmfr
 dnf5 -y copr disable gmaglione/podman-bootc

@@ -4,22 +4,17 @@ echo "::group:: ===$(basename "$0")==="
 
 set -eoux pipefail
 
-# Add Akmods repo
-dnf5 -y copr enable ublue-os/akmods
-
-# Add Staging repo
-dnf5 -y copr enable ublue-os/staging
-
 # Add Packages repo
 dnf5 -y copr enable ublue-os/packages
 
-# Add Switcheroo Repo
-dnf5 -y copr enable sentry/switcheroo-control_discrete
+# Add staging repo
+dnf5 -y copr enable ublue-os/staging
 
 # Add Nerd Fonts Repo
 dnf5 -y copr enable che/nerd-fonts
 
-# Add Oversteer Repo
-dnf5 -y copr enable kylegospo/oversteer 
+# Add Fedora Multimedia Repo
+dnf config-manager addrepo --from-repofile=https://negativo17.org/repos/fedora-multimedia.repo
+sed -i '0,/enabled=1/{s/enabled=1/enabled=1\npriority=90/}' /etc/yum.repos.d/fedora-multimedia.repo
 
 echo "::endgroup::"

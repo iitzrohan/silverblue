@@ -16,8 +16,6 @@
 				"ddcutil",
 				"distrobox",
 				"evtest",
-				"ffmpeg",
-				"ffmpegthumbnailer",
 				"flatpak-spawn",
 				"foo2zjs",
 				"fuse",
@@ -27,11 +25,6 @@
 				"gcc",
 				"git-credential-libsecret",
 				"glow",
-				"google-noto-sans-balinese-fonts",
-				"google-noto-sans-cjk-fonts",
-				"google-noto-sans-javanese-fonts",
-				"google-noto-sans-sundanese-fonts",
-				"grub2-tools-extra",
 				"gum",
 				"heif-pixbuf-loader",
 				"helix",
@@ -39,12 +32,10 @@
 				"htop",
 				"ibus-mozc",
 				"ifuse",
-				"intel-vaapi-driver",
 				"jetbrains-mono-fonts-all",
 				"just",
 				"krb5-workstation",
 				"libcamera",
-				"libcamera-gstreamer",
 				"libcamera-ipa",
 				"libcamera-tools",
 				"libfdk-aac",
@@ -65,8 +56,6 @@
 				"oddjob-mkhomedir",
 				"opendyslexic-fonts",
 				"openrgb-udev-rules",
-				"openssl",
-				"oversteer-udev",
 				"pam-u2f",
 				"pam_yubico",
 				"pamu2fcfg",
@@ -110,21 +99,16 @@
 			],
 			"silverblue": [
 				"cryfs",
-				"gnome-epub-thumbnailer",
 				"gnome-shell-extension-appindicator",
 				"gnome-shell-extension-gsconnect",
 				"gnome-shell-extension-tailscale-gnome-qs",
-                "gvfs-nfs",
 				"libgda",
 				"libgda-sqlite",
 				"libratbag-ratbagd",
 				"nautilus-gsconnect",
 				"nautilus-open-any-terminal",
 				"openssh-askpass",
-				"simple-scan",
-				"yaru-theme",
-				"zenity"
-				
+				"zenity"				
 			],
 			"dx": [
 				"adobe-source-code-pro-fonts",
@@ -144,7 +128,6 @@
 				"code",
 				"containerd.io",
 				"dbus-x11",
-				"devpod",
 				"docker-ce",
 				"docker-ce-cli",
 				"docker-buildx-plugin",
@@ -158,7 +141,6 @@
 				"incus",
 				"incus-agent",
 				"iotop",
-				"kcli",
 				"libvirt",
 				"libvirt-nss",
 				"lxc",
@@ -198,7 +180,6 @@
 				"trace-cmd",
 				"ubuntu-family-fonts",
 				"udica",
-				"umoci",
 				"virt-manager",
 				"virt-viewer",
 				"virt-v2v",
@@ -240,16 +221,27 @@
 			"dx": []
 		}
 	},
-	"40": {
+	"41": {
 		"include": {
 			"all": [
-				"ptyxis"
+				"epson-inkjet-printer-escpr",
+				"epson-inkjet-printer-escpr2",
+				"google-noto-fonts-all",
+				"ffmpeg",
+				"ffmpeg-libs",
+				"ffmpegthumbnailer",
+				"grub2-tools-extra",
+				"google-noto-sans-balinese-fonts",
+				"google-noto-sans-cjk-fonts",
+				"google-noto-sans-javanese-fonts",
+				"google-noto-sans-sundanese-fonts",
+				"intel-vaapi-driver",
+				"libcamera-gstreamer",
+				"openssl",
+				"pipewire-libs-extra"
 			],
 			"silverblue": [],
-			"dx": [
-				"lxd-agent",
-				"lxd"
-			]
+			"dx": []
 		},
 		"exclude": {
 			"all": [],
@@ -257,15 +249,9 @@
 			"dx": []
 		}
 	},
-	"41": {
+	"42": {
 		"include": {
-			"all": [
-				"epson-inkjet-printer-escpr",
-				"epson-inkjet-printer-escpr2",
-				"ffmpeg-libs",
-				"google-noto-fonts-all",
-				"pipewire-libs-extra"
-			],
+			"all": [],
 			"silverblue": []
 		},
 		"exclude": {

@@ -10,20 +10,11 @@ if [[ "${FEDORA_MAJOR_VERSION}" -lt "42" ]]; then
     dnf5 -y copr enable ganto/lxc4
 fi
 
-#umoci
-dnf5 -y copr enable ganto/umoci
-
 # Add Akmods repo
 dnf5 -y copr enable ublue-os/akmods
 
-#ublue-os staging
-dnf5 -y copr enable ublue-os/staging
-
 #ublue-os packages
 dnf5 -y copr enable ublue-os/packages
-
-#karmab-kcli
-dnf5 -y copr enable karmab/kcli
 
 # Fonts
 dnf5 -y copr enable atim/ubuntu-fonts

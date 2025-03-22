@@ -16,11 +16,13 @@ echo "::endgroup::"
 # Get COPR Repos
 /ctx/build_files/base/02-install-copr-repos.sh
 
-# Install Overrides and Fetch Install
-/ctx/build_files/base/05-override-base.sh
-
 # Install Kernel and Akmods
 /ctx/build_files/base/03-install-kernel-akmods.sh
+
+# Install Nvidia
+if [[ "${IMAGE_NAME}" =~ nvidia-open ]]; then
+    /ctx/build_files/base/04-nvidia-install.sh
+fi
 
 # Install Additional Packages
 /ctx/build_files/base/04-packages.sh
